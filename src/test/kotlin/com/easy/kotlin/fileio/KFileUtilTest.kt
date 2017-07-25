@@ -45,6 +45,27 @@ class KFileUtilTest {
         KFileUtil.appendFile(srcContent, destFile = "唐诗.txt")
     }
 
+    @Test fun testTraverseFileTree() {
+        KFileUtil.traverseFileTree(".")
+    }
+
+    @Test fun testGetFileSequenceBy() {
+        val fileSequence1 = KFileUtil.getFileSequenceBy(".", {
+            it.isDirectory
+        })
+        fileSequence1.forEach { println("fileSequence1: ${it.absoluteFile} ") }
+
+        val fileSequence2 = KFileUtil.getFileSequenceBy(".", {
+            it.isFile
+        })
+        fileSequence2.forEach { println("fileSequence2: ${it.absoluteFile} ") }
+
+        val fileSequence3 = KFileUtil.getFileSequenceBy(".", {
+            it.extension == "kt"
+        })
+        fileSequence3.forEach { println("fileSequence3: ${it.absoluteFile} ") }
+    }
+
 
     @Test fun testCountSummary() {
         println(KFileUtil.countSummary(filename))

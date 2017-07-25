@@ -1,0 +1,100 @@
+<img sloth-img="http://img0.imgtn.bdimg.com/it/u=2914038304,3734091474&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://www.shtimg.com/forum/201503/31/092036p77477xb4r9wjkoq.jpg" width="100%">
+<img sloth-img="http://img0.imgtn.bdimg.com/it/u=3503093012,1358043393&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://www.yisongjixie.com/img/bd7102591.jpg" width="100%">
+<img sloth-img="http://img4.imgtn.bdimg.com/it/u=3179790231,555717472&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://dynamic-image.yesky.com/136x102/uploadimages/2015/197/55/mb06ajuyw0j2.jpg" width="100%">
+<img sloth-img="http://img1.imgtn.bdimg.com/it/u=567024422,1255570055&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://img2.imgtn.bdimg.com/it/u=2091590959,1584281861&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://i-3.497.com/2016/8/17/e666d7f3-a90f-41bd-b1c0-f9d7db2f72f7.jpg" width="100%">
+<img sloth-img="http://img3.imgtn.bdimg.com/it/u=2241182568,1133319279&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://img4.imgtn.bdimg.com/it/u=752960480,2264394291&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://fjnews.fjsen.com/images/attachement/jpg/site2/20151113/00e06212dca717af7bd206.jpg" width="100%">
+<img sloth-img="http://img0.imgtn.bdimg.com/it/u=740472243,2021040034&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://img3.imgtn.bdimg.com/it/u=79615060,4104989158&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://www.zgqydx.cn/tupian/441347.jpg.jpg" width="100%">
+<img sloth-img="http://img2.imgtn.bdimg.com/it/u=462576743,1473170316&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://i2.w.hjfile.cn/doc/201601/ec3f9108515f4f6293ae0c4f5881f4c3.jpg" width="100%">
+<img sloth-img="http://img3.imgtn.bdimg.com/it/u=1880253161,2663981253&fm=214&gp=0.jpg" width="100%">
+<img sloth-img="http://pic1.win4000.com/wallpaper/c/568f229791fd9_120_80.jpg" width="100%">
+<img sloth-img="http://img0.imgtn.bdimg.com/it/u=2267501792,3469196380&fm=214&gp=0.jpg" width="100%">
+
+<script>
+    (function(factory) {
+        "use strict";
+        if (typeof exports === "object" && typeof module === "object") {
+            module.exports = factory();
+        } else if (typeof define === "function" && (define.amd || define.cmd)) {
+            define(factory);
+        } else {
+            window.Sloth = factory();
+        }
+
+    })(function() {
+        "use strict";
+
+        var _lazyFlag = "sloth-img"; // The mark of lazy load
+        var _viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
+            _viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+
+        function Sloth(elementId) {
+            this.elementId = elementId || "";
+
+            if (this.elementId && this.elementId.indexOf("#") < 0) {
+                this.elementId += "#";
+            }
+
+            if (!this._images) { // Get All Images
+                this._images = (this.elementId ?
+                        document.querySelector(elementId).querySelectorAll('img[' + _lazyFlag + ']') :
+                        document.querySelectorAll('img[' + _lazyFlag + ']')) || [];
+            }
+        }
+
+        Sloth.prototype.load = function() { // Auto load
+            var images = this._images;
+            if (images.length > 0) {
+                for (var i = 0; i < images.length; i++) {
+                    var img = images[i];
+                    if (this.isOnVerticalViewPort(img) && this.isOnHorizontalViewPort(img)) {
+                        var url = img.getAttribute(_lazyFlag);
+                        img.setAttribute("src", url);
+                        img.isload = true;
+                    }
+                }
+            }
+        };
+
+        Sloth.prototype.init = function() {
+            var self = this;
+            self.load();
+            window.addEventListener("scroll", function(e) {
+                self.load();
+            }, false);
+        };
+
+        Sloth.prototype.isOnVerticalViewPort = function(ele) {
+            var rect = ele.getBoundingClientRect();
+            return rect.top > 0 && rect.top <= _viewPortHeight;
+        };
+
+        Sloth.prototype.isOnHorizontalViewPort = function(ele) {
+            var rect = ele.getBoundingClientRect();
+            return rect.left > 0 && rect.left <= _viewPortWidth;
+        };
+
+        return Sloth;
+    });
+
+    // 默认加载body体全部sloth图片
+    var sloth = new Sloth();
+    // 默认滚动条加载
+    sloth.init();
+
+    // 手动加载
+    sloth.load();
+
+    // 惰性加载Scroll ID 元素内的图片
+//    var sloth = new Sloth("#Scroll");
+
+</script>

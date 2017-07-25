@@ -1,6 +1,9 @@
 package com.easy.kotlin.fileio
 
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStream
+import java.io.Reader
 import java.nio.charset.Charset
 import java.util.*
 import java.util.regex.Pattern
@@ -48,7 +51,7 @@ object KFileUtil {
     }
 
     /**
-     * 追加写文件
+     * 末尾追加写文件
      */
     fun appendFile(text: String, destFile: String) {
         val f = File(destFile)
@@ -56,6 +59,49 @@ object KFileUtil {
             f.createNewFile()
         }
         f.appendText(text, Charset.defaultCharset())
+    }
+
+    /**
+     * 首行插入写文件
+     */
+    fun 首行插入写文件(text: String, destFile: String) {
+        val f = File(destFile)
+        if (!f.exists()) {
+            f.createNewFile()
+        }
+        val lines = getFileLines(destFile)
+        val newLines = ArrayList<String>(lines.size + 1)
+        newLines.add(text)
+        lines.forEach {
+            newLines.add(it)
+        }
+
+        val newText = newLines.joinToString(separator = "\n") { it }
+        f.writeText(newText, Charset.defaultCharset())
+    }
+
+    fun traverseFileTree(filename: String) {
+        val f = File(filename)
+        val fileTreeWalk = f.walk()
+        fileTreeWalk.iterator().forEach { println(it.absolutePath) }
+    }
+
+    /**
+     * 遍历当前文件下面所有子目录文件，存入一个 Iterator<File> 中
+     */
+    fun getFileIterator(filename: String): Iterator<File> {
+        val f = File(filename)
+        val fileTreeWalk = f.walk()
+        return fileTreeWalk.iterator()
+    }
+
+
+    /**
+     * 遍历当前文件下面所有子目录文件，根据过滤条件过滤，并把结果存入一个 Sequence<File> 中
+     */
+    fun getFileSequenceBy(filename: String, p: (File) -> Boolean): Sequence<File> {
+        val f = File(filename)
+        return f.walk().filter(p)
     }
 
 
@@ -207,4 +253,29 @@ object KFileUtil {
         return count
     }
 
+}
+
+
+fun main(args: Array<String>) {
+    val filename = "test.data"
+    val f = File(filename)
+    val contents = f.readText()
+    println(contents)
+
+    //大写前三行
+    f.readLines().take(3).forEach {
+        println(it.toUpperCase())
+    }
+
+    //直接处理行
+    f.forEachLine(action = ::println)
+
+    //读取为bytes
+    val bytes: ByteArray = f.readBytes()
+    println(bytes.joinToString(separator = " "))
+
+    //直接处理Reader或InputStream
+    val reader: Reader = f.reader()
+    val inputStream: InputStream = f.inputStream()
+    val bufferedReader: BufferedReader = f.bufferedReader()
 }
