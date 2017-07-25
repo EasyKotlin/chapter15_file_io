@@ -20,14 +20,13 @@ public class ShellUtil {
                 return output;
             }
             //	输出 Shell 执行的结果
-            try (InputStream in = process.getInputStream();
-                 InputStreamReader isr = new InputStreamReader(in);
-                 BufferedReader reader = new BufferedReader(isr)) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // System.out.println(line);
-                    output += line + "\n";
-                }
+            InputStream in = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(isr);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // System.out.println(line);
+                output += line + "\n";
             }
 
         } catch (Exception e) {
