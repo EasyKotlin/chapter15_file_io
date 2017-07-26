@@ -51,7 +51,6 @@ fun getImgUrls(word: String) {
         lines.forEach {
             val m = p.matcher(it)
             while (m.find()) {
-
                 try {
                     val result = m.group()
                     val startIndex = result.indexOf("{\"ObjURL\":\"") + "{\"ObjURL\":\"".length
@@ -67,12 +66,9 @@ fun getImgUrls(word: String) {
                     if (!美女文件所有行.contains(line) && size > 100 && imgUrl.endsWith(".jpg")) { // 重复的 url 不写
                         KFileUtil.首行插入写文件(line, 美女文件名)
                     }
-
-
                 } catch (ex: Exception) {
 
                 }
-
             }
         }
 

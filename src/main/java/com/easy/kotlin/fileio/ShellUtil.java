@@ -25,7 +25,6 @@ public class ShellUtil {
             BufferedReader reader = new BufferedReader(isr);
             String line;
             while ((line = reader.readLine()) != null) {
-                // System.out.println(line);
                 output += line + "\n";
             }
 
